@@ -2,6 +2,7 @@ import time
 import random
 
 start_time = None
+lotes = []
 
 #Funcion que retorna un numero aleatorio para el tiempo maximo estimado de un proceso
 def getTiempoMaxEstimado():
@@ -23,7 +24,7 @@ def getOperacion():
 def generar_lotes(n):
     nombre_programadores = ['Alan', 'Juan', 'Jenny', 'Luis', 'Maria', 'Pedro', 'Sofia', 'Tom', 'Valeria', 'Ximena']
     num_programa = 1
-    lotes = []
+    global lotes
     lote = []
     
     for i in range(n):
@@ -44,26 +45,45 @@ def generar_lotes(n):
     if lote:
         lotes.append(lote)
     
-    return lotes
+    # return lotes
+
+
 
 #Funcion para escribir lotes a un archivo
-def escribir_lotes_a_archivo(n):
-    lotes = generar_lotes(n)
-
-    with open('datos.txt', 'w') as f:
+def lotes_a_txt():
+    global lotes
+    with open('datos.txt', 'w') as file:
         for i, lote in enumerate(lotes, start=1):
-            f.write(f'Lote {i}:\n')
-            f.write('\n')
+            file.write(f'Lote {i}:\n')
+            file.write('\n')
             for proceso in lote:
-                f.write(f"{proceso['numero_programa']}. {proceso['nombre']}\n")
-                f.write(f"{proceso['operacion']}\n")
-                f.write(f"TME: {proceso['tiempo_maximo']}\n")
-                f.write('\n')
-                f.write('\n')
-            f.write('\n')
+                file.write(f"{proceso['numero_programa']}. {proceso['nombre']}\n")
+                file.write(f"{proceso['operacion']}\n")
+                file.write(f"TME: {proceso['tiempo_maximo']}\n")
+                file.write('\n')
+                file.write('\n')
+            file.write('\n')
 
-escribir_lotes_a_archivo(8)
 
+def resultados_a_txt():
+    global lotes
+    with open('Resultados.txt', 'w') as file:
+        for i, lote in enumerate(lotes, start=1):
+            file.write(f'Lote {i}:\n')
+            file.write('\n')
+            for proceso in lote:
+                resultado = eval(proceso['operacion'])
+                
+                file.write(f"{proceso['numero_programa']}. {proceso['nombre']}\n")
+                file.write(f"{proceso['operacion']} = {resultado}\n")
+                file.write(f"TME: {proceso['tiempo_maximo']}\n")
+                file.write('\n')
+                file.write('\n')
+            file.write('\n')
+
+
+def mostrar_lotes(lotes):
+    skip
 
 def update_clock(relojGlobal_label, root): #Función que actualiza el reloj
     global start_time
@@ -74,3 +94,5 @@ def update_clock(relojGlobal_label, root): #Función que actualiza el reloj
     root.after(1000, update_clock, relojGlobal_label, root)  # Actualiza el reloj cada 1000 milisegundos
     
 
+generar_lotes(3)
+lotes_a_txt()

@@ -1,6 +1,6 @@
-import time
 from tkinter import *
 from tkinter import ttk
+from logic import update_clock
 
 root = Tk()
 
@@ -68,5 +68,5 @@ obtenerResultadosBtn.grid(column=0, row=3, columnspan=2, pady=10)
 
 #------------------
 
-
+root.after(1000, update_clock, relojGlobal_label, root)  # Inicia el reloj 1 segundo después de abrir el programa
 root.mainloop()

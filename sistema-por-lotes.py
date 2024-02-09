@@ -16,8 +16,8 @@ terminadosFrame = ttk.Frame(content,  width=100, height=100)
 noProcesos_label = ttk.Label(enEsperaFrame, text="# Procesos")
 noProcesos_entry = ttk.Entry(enEsperaFrame, width=8)
 
-lotesEnEspera_label = ttk.Label(enEsperaFrame, text="EN ESPERA")
-lotesEnEspera_text = Text(enEsperaFrame, width=20, height=20)
+enEspera_label = ttk.Label(enEsperaFrame, text="EN ESPERA")
+procesosEnEspera_text = Text(enEsperaFrame, width=20, height=20)
 
 noLotesPendientes_label = ttk.Label(enEsperaFrame, text="# De lotes pendientes")
 #----------------------------------
@@ -36,7 +36,7 @@ terminados_text = Text(terminadosFrame, width=20, height=20)
 
 #----- Botones -----
 # generarBtn = ttk.Button(enEsperaFrame, command=(generar_procesos, ejecucion_text, noProcesos_entry, noLotesPendientes_label) ,text="Generar")
-generarBtn = ttk.Button(enEsperaFrame, command=lambda: generar_procesos(noProcesos_entry, ejecucion_text, noLotesPendientes_label, root), text="Generar")
+generarBtn = ttk.Button(enEsperaFrame, command=lambda: generar_procesos(noProcesos_entry, ejecucion_text, noLotesPendientes_label, root, procesosEnEspera_text), text="Generar")
 
 
 obtenerResultadosBtn = ttk.Button(terminadosFrame, text="OBTENER RESULTADOS")
@@ -51,8 +51,8 @@ noProcesos_label.grid(column=0, row=0)
 noProcesos_entry.grid(column=1, row=0)
 generarBtn.grid(column=2, row=0, padx=10)
 
-lotesEnEspera_label.grid(column=0, row=1, columnspan=3, pady=10)
-lotesEnEspera_text.grid(column=0, row=2, columnspan=3)
+enEspera_label.grid(column=0, row=1, columnspan=3, pady=10)
+procesosEnEspera_text.grid(column=0, row=2, columnspan=3)
 
 noLotesPendientes_label.grid(column=0, row=3, columnspan=2, pady=10)
 #------------------

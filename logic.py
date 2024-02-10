@@ -86,23 +86,23 @@ def resultados_a_txt():
                     file.write('\n')
                 file.write('\n')
 
-def check_procesos_ejecucion():
-    global lotes
-    for lote in lotes:
-        for proceso in lote:
-            if proceso['estado'] == 1:
-                return True
-    return False
+# def check_procesos_ejecucion():
+#     global lotes
+#     for lote in lotes:
+#         for proceso in lote:
+#             if proceso['estado'] == 1:
+#                 return True
+#     return False
 
-def contar_procesos_en_espera(lote):
-    count = 0
-    for proceso in lote:
-        if proceso['estado'] == 0:
-            count += 1
-    return count
+# def contar_procesos_en_espera(lote):
+#     count = 0
+#     for proceso in lote:
+#         if proceso['estado'] == 0:
+#             count += 1
+#     return count
 
 
-def ejecutar_proceso(lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text,tiempo_inicio_proceso=None):
+def ejecutar_proceso(lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text, terminados_text, procesos_terminados=[], tiempo_inicio_proceso=None):
     if lotes:  # Si hay lotes pendientes
         lote_actual = lotes[0]  # Toma el primer lote
         procesoEnEjecucion = lote_actual[0]  # Toma el primer proceso en espera
@@ -111,20 +111,20 @@ def ejecutar_proceso(lotes, noLotesPendientes_label, ejecucion_text, root, proce
         tiempo_transcurrido = time.time() - start_time - tiempo_inicio_proceso
         tiempo_restante = procesoEnEjecucion['tiempo_maximo'] - tiempo_transcurrido
         if tiempo_restante <= 0:  # Si el tiempo restante ha llegado a cero
-            lote_actual.pop(0)  # Elimina el proceso de la lista de procesos en espera
+            procesos_terminados.append(lote_actual.pop(0))  # Elimina el proceso de la lista de procesos en espera y lo añade a la lista de procesos terminados
             tiempo_inicio_proceso = None  # Resetea el tiempo de inicio para el próximo proceso
             if not lote_actual:  # Si el lote actual está vacío
                 lotes.pop(0)  # Elimina el lote de la lista de lotes
+                ejecucion_text.delete('1.0', END)
 
         # Actualiza la interfaz de usuario
         ejecucion_text.delete('1.0', END)  # Limpia el widget Text antes de insertar nuevo texto
-        ejecucion_text.insert(END, f"{procesoEnEjecucion['numero_programa']}. {procesoEnEjecucion['nombre']}\n{procesoEnEjecucion['operacion']}\nTME: {round(tiempo_restante) if tiempo_restante > 0 else 0}")
+        if lote_actual:
+            ejecucion_text.insert(END, f"{procesoEnEjecucion['numero_programa']}. {procesoEnEjecucion['nombre']}\n{procesoEnEjecucion['operacion']}\nTME: {round(tiempo_restante) if tiempo_restante > 0 else 0}")
         cantidad_lotes = max(0, len(lotes) - 1)
         noLotesPendientes_label.config(text=f"# De lotes pendientes: {cantidad_lotes}")
         procesosEnEspera_text.delete('1.0', END)  # Limpia el widget Text antes de insertar nuevo texto
-        # for proceso in lote_actual[1:]:  # Para cada proceso en espera en el lote actual
-        #     procesosEnEspera_text.insert(END, f"{proceso['numero_programa']}. {proceso['nombre']}\n{proceso['operacion']}\nTME: {proceso['tiempo_maximo']}\n\n")
-        # root.after(1000, ejecutar_proceso, lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text,tiempo_inicio_proceso)
+        
         if len(lote_actual) == 1:  # Si solo queda un proceso en el lote actual
             if lotes[1:]:  # Si hay más lotes
                 lote_siguiente = lotes.pop(1)  # Toma el siguiente lote
@@ -132,15 +132,19 @@ def ejecutar_proceso(lotes, noLotesPendientes_label, ejecucion_text, root, proce
 
         for proceso in lote_actual[1:]:  # Para cada proceso en espera en el lote actual
             procesosEnEspera_text.insert(END, f"{proceso['numero_programa']}. {proceso['nombre']}\n{proceso['operacion']}\nTME: {proceso['tiempo_maximo']}\n\n")
-        root.after(1000, ejecutar_proceso, lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text, tiempo_inicio_proceso)
+        terminados_text.delete('1.0', END)
+        for proceso in procesos_terminados:  # Para cada proceso terminado
+            resultado = round(eval(proceso['operacion']), 4)
+            terminados_text.insert(END, f"{proceso['numero_programa']}. {proceso['nombre']}\n{proceso['operacion']} = {resultado}\n\n")
+        root.after(1000, ejecutar_proceso, lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text, terminados_text, procesos_terminados, tiempo_inicio_proceso)
 
-def generar_procesos(noProcesos_entry, ejecucion_text, noLotesPendientes_label, root, procesosEnEspera_text):
+
+def generar_procesos(noProcesos_entry, ejecucion_text, noLotesPendientes_label, root, procesosEnEspera_text, terminados_text):
     global lotes
     n = int(noProcesos_entry.get())
     crear_lotes(n)
     lotes_a_txt()
-
-    ejecutar_proceso(lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text)  # Inicia el "bucle"
+    ejecutar_proceso(lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text, terminados_text)  # Inicia el "bucle"
 
 
 

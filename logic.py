@@ -75,7 +75,6 @@ def resultados_a_txt():
                 file.write('\n')
                 for proceso in lote:
                     resultado = eval(proceso['operacion'])
-                    
                     file.write(f"{proceso['numero_programa']}. {proceso['nombre']}\n")
                     file.write(f"{proceso['operacion']} = {resultado}\n")
                     file.write('\n')
@@ -139,6 +138,7 @@ def generar_procesos(noProcesos_entry, ejecucion_text, noLotesPendientes_label, 
     n = int(noProcesos_entry.get())
     crear_lotes(n)
     lotes_a_txt()
+    resultados_a_txt()
     ejecutar_proceso(lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text, terminados_text)  # Inicia el "bucle"
 
 

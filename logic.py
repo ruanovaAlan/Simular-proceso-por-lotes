@@ -105,7 +105,7 @@ def en_ejecucion(lotes, ejecucion_text, tiempo_inicio_proceso):
         ejecucion_text.insert(END, f"{procesoEnEjecucion['numero_programa']}. {procesoEnEjecucion['nombre']}\n{procesoEnEjecucion['operacion']}\nTME: {round(tiempo_restante) if tiempo_restante > 0 else 0}")
     return tiempo_restante, tiempo_inicio_proceso
 
-def terminados(lotes, terminados_text, procesos_terminados, tiempo_restante, tiempo_inicio_proceso, ejecucion_text):
+def terminados(lotes, terminados_text, procesos_terminados, tiempo_restante, tiempo_inicio_proceso, ejecucion_text, obtenerResultadosBtn):
     lote_actual = lotes[0]
     if tiempo_restante <= 0:  
         procesos_terminados.append(lote_actual.pop(0))  # Elimina el proceso de la lista de procesos en espera y lo añade a la lista de procesos terminados
@@ -117,29 +117,34 @@ def terminados(lotes, terminados_text, procesos_terminados, tiempo_restante, tie
     for proceso in procesos_terminados: #Muestra los procesos terminados
         resultado = round(eval(proceso['operacion']), 4)
         terminados_text.insert(END, f"{proceso['numero_programa']}. {proceso['nombre']}\n{proceso['operacion']} = {resultado}\n\n")
+    
+    # Si todos los lotes están vacíos, habilita el botón obtenerResultadosBtn
+    if not lotes:
+        obtenerResultadosBtn.config(state='normal')
+    
     return tiempo_inicio_proceso
 
-def ejecutar_proceso(lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text, terminados_text, procesos_terminados=[], tiempo_inicio_proceso=None):
+def ejecutar_proceso(lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text, terminados_text, obtenerResultadosBtn, procesos_terminados=[], tiempo_inicio_proceso=None):
     if lotes:  
         #Funcion para mostrar el proceso en ejecución
         tiempo_restante, tiempo_inicio_proceso = en_ejecucion(lotes, ejecucion_text, tiempo_inicio_proceso)
         en_espera(lotes, procesosEnEspera_text) #Funcion para mostrar los procesos en espera
         #Funcion para mostrar los procesos terminados
-        tiempo_inicio_proceso = terminados(lotes, terminados_text, procesos_terminados, tiempo_restante, tiempo_inicio_proceso, ejecucion_text)
+        tiempo_inicio_proceso = terminados(lotes, terminados_text, procesos_terminados, tiempo_restante, tiempo_inicio_proceso, ejecucion_text, obtenerResultadosBtn)
         cantidad_lotes = max(0, len(lotes) - 1) #Si no hay lotes, se muestra 0
         # Actualiza el número de lotes pendientes
         noLotesPendientes_label.config(text=f"# De lotes pendientes: {cantidad_lotes}")
         # Llama a la función de nuevo después de 1000 milisegundos
-        root.after(1000, ejecutar_proceso, lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text, terminados_text, procesos_terminados, tiempo_inicio_proceso)
+        root.after(1000, ejecutar_proceso, lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text, terminados_text, obtenerResultadosBtn, procesos_terminados, tiempo_inicio_proceso)
 
 #Funcion para generar procesos y ejecutarlos
-def generar_procesos(noProcesos_entry, ejecucion_text, noLotesPendientes_label, root, procesosEnEspera_text, terminados_text):
+def generar_procesos(noProcesos_entry, ejecucion_text, noLotesPendientes_label, root, procesosEnEspera_text, terminados_text, obtenerResultadosBtn):
     global lotes
     n = int(noProcesos_entry.get())
     crear_lotes(n)
     lotes_a_txt()
     resultados_a_txt()
-    ejecutar_proceso(lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text, terminados_text)  # Inicia el "bucle"
+    ejecutar_proceso(lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text, terminados_text, obtenerResultadosBtn)  # Inicia el "bucle"
 
 
 #Función que actualiza el reloj

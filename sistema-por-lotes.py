@@ -36,7 +36,7 @@ terminados_text = Text(terminadosFrame, width=20, height=20)
 
 #----- Botones ----- 
 #Generar procesos y obtener resultados
-generarBtn = ttk.Button(enEsperaFrame, command=lambda: generar_procesos(noProcesos_entry, ejecucion_text, noLotesPendientes_label, root, procesosEnEspera_text, terminados_text, obtenerResultadosBtn), text="Generar")
+generarBtn = ttk.Button(enEsperaFrame, command=lambda: generar_procesos(noProcesos_entry, ejecucion_text, noLotesPendientes_label, root, procesosEnEspera_text, terminados_text, obtenerResultadosBtn, relojGlobal_label), text="Generar")
 obtenerResultadosBtn = ttk.Button(terminadosFrame, state='disabled',command=lambda: resultados_a_txt(), text="OBTENER RESULTADOS")
 #--- Grid Layout ---
 content.grid(column=0, row=0)
@@ -69,5 +69,4 @@ obtenerResultadosBtn.grid(column=0, row=3, columnspan=2, pady=10)
 #------------------
 
 #Llama a la función update_clock y mainloop
-root.after(1000, update_clock, relojGlobal_label, root)  # Inicia el reloj 1 segundo después de abrir el programa
 root.mainloop()

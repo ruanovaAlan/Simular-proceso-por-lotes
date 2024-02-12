@@ -137,16 +137,6 @@ def ejecutar_proceso(lotes, noLotesPendientes_label, ejecucion_text, root, proce
         # Llama a la función de nuevo después de 1000 milisegundos
         root.after(1000, ejecutar_proceso, lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text, terminados_text, obtenerResultadosBtn, procesos_terminados, tiempo_inicio_proceso)
 
-#Funcion para generar procesos y ejecutarlos
-def generar_procesos(noProcesos_entry, ejecucion_text, noLotesPendientes_label, root, procesosEnEspera_text, terminados_text, obtenerResultadosBtn):
-    global lotes
-    n = int(noProcesos_entry.get())
-    crear_lotes(n)
-    lotes_a_txt()
-    resultados_a_txt()
-    ejecutar_proceso(lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text, terminados_text, obtenerResultadosBtn)  # Inicia el "bucle"
-
-
 #Función que actualiza el reloj
 def update_clock(relojGlobal_label, root): 
     global start_time
@@ -155,5 +145,18 @@ def update_clock(relojGlobal_label, root):
     elapsed_time = time.time() - start_time
     relojGlobal_label.config(text=f"Reloj: {int(elapsed_time)} segundos")
     root.after(1000, update_clock, relojGlobal_label, root)  # Actualiza el reloj cada 1000 milisegundos
-    
+
+
+#Funcion para generar procesos y ejecutarlos
+def generar_procesos(noProcesos_entry, ejecucion_text, noLotesPendientes_label, root, procesosEnEspera_text, terminados_text, obtenerResultadosBtn, relojGlobal_label):
+    global lotes
+    n = int(noProcesos_entry.get())
+    crear_lotes(n)
+    lotes_a_txt()
+    resultados_a_txt()
+    update_clock(relojGlobal_label, root)  # Inicia el reloj 1 segundo después de abrir el programa
+    ejecutar_proceso(lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text, terminados_text, obtenerResultadosBtn)  # Inicia el "bucle"
+
+
+
 

@@ -13,28 +13,29 @@ terminadosFrame = ttk.Frame(content,  width=100, height=100)
 #----- Campos y etiquetas -----
 
 #contenido del frame "en espera"
-noProcesos_label = ttk.Label(enEsperaFrame, text="# Procesos")
+noProcesos_label = ttk.Label(enEsperaFrame, text="# Procesos") #Ingrese el número de procesos
 noProcesos_entry = ttk.Entry(enEsperaFrame, width=8)
 
-enEspera_label = ttk.Label(enEsperaFrame, text="EN ESPERA")
+enEspera_label = ttk.Label(enEsperaFrame, text="EN ESPERA") #Procesos en espera
 procesosEnEspera_text = Text(enEsperaFrame, width=20, height=20)
 
-noLotesPendientes_label = ttk.Label(enEsperaFrame, text="# De lotes pendientes")
+noLotesPendientes_label = ttk.Label(enEsperaFrame, text="# De lotes pendientes") #Número de lotes pendientes
 #----------------------------------
 
 #contenido del frame "en ejecución"
-ejecucion_label = ttk.Label(ejecucionFrame, text="EN EJECUCIÓN")
+ejecucion_label = ttk.Label(ejecucionFrame, text="EN EJECUCIÓN") #Proceso en ejecución
 ejecucion_text = Text(ejecucionFrame, width=20, height=10)
 #----------------------------------
 
 #contenido del frame "terminados"
-relojGlobal_label = ttk.Label(terminadosFrame, text="Reloj Global")
+relojGlobal_label = ttk.Label(terminadosFrame, text="Reloj Global") #Reloj global
 
-terminados_label = ttk.Label(terminadosFrame, text="TERMINADOS")
+terminados_label = ttk.Label(terminadosFrame, text="TERMINADOS") #Procesos terminados
 terminados_text = Text(terminadosFrame, width=20, height=20)
 #----------------------------------
 
-#----- Botones -----
+#----- Botones ----- 
+#Generar procesos y obtener resultados
 generarBtn = ttk.Button(enEsperaFrame, command=lambda: generar_procesos(noProcesos_entry, ejecucion_text, noLotesPendientes_label, root, procesosEnEspera_text, terminados_text, obtenerResultadosBtn), text="Generar")
 obtenerResultadosBtn = ttk.Button(terminadosFrame, state='disabled',command=lambda: resultados_a_txt(), text="OBTENER RESULTADOS")
 #--- Grid Layout ---
@@ -67,5 +68,6 @@ obtenerResultadosBtn.grid(column=0, row=3, columnspan=2, pady=10)
 
 #------------------
 
+#Llama a la función update_clock y mainloop
 root.after(1000, update_clock, relojGlobal_label, root)  # Inicia el reloj 1 segundo después de abrir el programa
 root.mainloop()

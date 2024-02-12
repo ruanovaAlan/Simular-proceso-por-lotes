@@ -129,7 +129,7 @@ def en_ejecucion(lotes, ejecucion_text, tiempo_inicio_proceso):
 def terminados(lotes, terminados_text, procesos_terminados, tiempo_restante, tiempo_inicio_proceso, ejecucion_text, obtenerResultadosBtn):
     lote_actual = lotes[0]
     
-    if tiempo_restante <= 1:  #? cambiar el tiempo a 0
+    if tiempo_restante <= 0:  #? cambiar el tiempo a 0
         procesos_terminados.append(lote_actual.pop(0))  # Elimina el proceso de la lista de procesos en espera y lo añade a la lista de procesos terminados
         tiempo_inicio_proceso = None  # Resetea el tiempo de inicio para el próximo proceso
         if not lote_actual:  # Si el lote actual está vacío

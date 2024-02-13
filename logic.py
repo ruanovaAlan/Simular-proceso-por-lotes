@@ -1,11 +1,13 @@
 import time
 import random
+import copy
 from tkinter import *
 from tkinter import ttk
 
 start_time = None #Variable para el reloj
 clock_running = True #Variable para validar si el reloj esta corriendo
 lotes = [] #Array de lotes
+lotes_terminados = [] #Array de lotes terminados
 
 
 
@@ -45,6 +47,7 @@ def crear_lotes(n):
     nombre_programadores = ['Alan', 'Juan', 'Jenny', 'Luis', 'Maria', 'Pedro', 'Sofia', 'Tom', 'Valeria', 'Ximena']
     num_programa = 1
     global lotes
+    global lotes_terminados
     lote = []
     
     for i in range(n):
@@ -60,9 +63,13 @@ def crear_lotes(n):
         
         if len(lote) == 5:
             lotes.append(lote)
+            
             lote = []
     if lote:
         lotes.append(lote)
+        
+    # Hacer una copia profunda de lotes en lotes_terminados
+    lotes_terminados = copy.deepcopy(lotes)
 
 
 
@@ -85,19 +92,19 @@ def lotes_a_txt():
 
 #Funcion para escribir resultados a un archivo
 def resultados_a_txt():
-    global lotes
-    if lotes != []:
-        with open('Resultados.txt', 'w') as file:
-            for i, lote in enumerate(lotes, start=1):
-                file.write(f'Lote {i}:\n')
+    global lotes_terminados 
+    with open('Resultados.txt', 'w') as file:
+        for i, lote in enumerate(lotes_terminados, start=1):
+            file.write(f'Lote {i}:\n')
+            file.write('\n')
+            for proceso in lote:
+                resultado = eval(proceso['operacion'])
+                file.write(f"{proceso['numero_programa']}. {proceso['nombre']}\n")
+                file.write(f"{proceso['operacion']} = {resultado}\n")
                 file.write('\n')
-                for proceso in lote:
-                    resultado = eval(proceso['operacion'])
-                    file.write(f"{proceso['numero_programa']}. {proceso['nombre']}\n")
-                    file.write(f"{proceso['operacion']} = {resultado}\n")
-                    file.write('\n')
-                    file.write('\n')
                 file.write('\n')
+            file.write('\n')
+
 
 
 def en_espera(lotes, procesosEnEspera_text):
@@ -169,7 +176,6 @@ def generar_procesos(noProcesos_entry, ejecucion_text, noLotesPendientes_label, 
     n = int(noProcesos_entry.get())
     crear_lotes(n)
     lotes_a_txt()
-    resultados_a_txt()
     update_clock(relojGlobal_label, root)  # Inicia el reloj 1 segundo después de abrir el programa
     ejecutar_proceso(lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text, terminados_text, obtenerResultadosBtn)  # Inicia el "bucle"
 

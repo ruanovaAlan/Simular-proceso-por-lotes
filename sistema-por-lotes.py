@@ -69,5 +69,5 @@ obtenerResultadosBtn.grid(column=0, row=3, columnspan=2, pady=10)
 
 #------------------
 
-#Llama a la función update_clock y mainloop
+#Llama a la función mainloop
 root.mainloop()

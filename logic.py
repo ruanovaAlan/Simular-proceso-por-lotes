@@ -166,7 +166,7 @@ def ejecutar_proceso(lotes, noLotesPendientes_label, ejecucion_text, root, proce
         cantidad_lotes = max(0, len(lotes) - 1) #Si no hay lotes, se muestra 0
         # Actualiza el número de lotes pendientes
         noLotesPendientes_label.config(text=f"# De lotes pendientes: {cantidad_lotes}")
-        # Llama a la función de nuevo después de 1000 milisegundos
+        # Llama a la función de nuevo después de 1 segundo
         root.after(1000, ejecutar_proceso, lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text, terminados_text, obtenerResultadosBtn, procesos_terminados, tiempo_inicio_proceso)
 
 
@@ -176,7 +176,7 @@ def generar_procesos(noProcesos_entry, ejecucion_text, noLotesPendientes_label, 
     n = int(noProcesos_entry.get())
     crear_lotes(n)
     lotes_a_txt()
-    update_clock(relojGlobal_label, root)  # Inicia el reloj 1 segundo después de abrir el programa
+    update_clock(relojGlobal_label, root)  # Inicia el reloj 
     ejecutar_proceso(lotes, noLotesPendientes_label, ejecucion_text, root, procesosEnEspera_text, terminados_text, obtenerResultadosBtn)  # Inicia el "bucle"
 
 
